@@ -1,6 +1,6 @@
 import { consola } from 'consola'
 import { ActivityType, Events } from 'discord.js'
-import { BOT_STATUS_ENABLED, BOT_STATUS_INTERVAL } from '../config'
+import { BOT_STATUS_ENABLED, BOT_STATUS_INTERVAL } from '../config.js'
 
 const activities = [
     {
@@ -51,11 +51,11 @@ export default {
             return this.initRefreshing(client)
         }
 
-        const status = await client.user.setActivity({
-            type: ActivityType.Custom,
-            name: 'customstatus',
-            state: 'Subskrybuj m7rlin | Poradniki dla Ciebie',
-        })
+        // const status = await client.user.setActivity({
+        //     type: ActivityType.Custom,
+        //     name: 'customstatus',
+        //     state: 'Subskrybuj m7rlin | Poradniki dla Ciebie',
+        // })
         // Change bot status
         await client.user.setStatus('online')
 

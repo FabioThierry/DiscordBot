@@ -1,10 +1,10 @@
 import { consola } from 'consola'
 import { Client, GatewayIntentBits } from 'discord.js'
 import packageJson from '../package.json' assert { type: 'json' }
-import CommandHandler from './CommandHandler'
-import EventHandler from './EventHandler'
-import AntiCrash from './utils/anti-crash.util'
-import { TOKEN } from './config'
+import CommandHandler from './CommandHandler.js'
+import EventHandler from './EventHandler.js'
+import AntiCrash from './utils/anti-crash.util.js'
+import { TOKEN } from './config.js'
 
 // Anti bot crash system
 AntiCrash.init()

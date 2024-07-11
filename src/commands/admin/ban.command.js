@@ -1,5 +1,5 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
-import { COMMAND_BAN_BAN_ONLY_MEMBERS } from '../../config'
+import { COMMAND_BAN_BAN_ONLY_MEMBERS } from '../../config.js'
 import consola from 'consola'
 
 export default {

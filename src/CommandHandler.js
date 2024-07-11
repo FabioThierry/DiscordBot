@@ -1,10 +1,10 @@
 import { Collection, REST, Routes } from 'discord.js'
 import fs from 'fs'
 import path from 'path'
-import { TOKEN, CLIENT_ID, GUILD_ID } from './config'
+import { TOKEN, CLIENT_ID, GUILD_ID } from './config.js'
 import chalk from 'chalk'
 import { AsciiTable3, AlignmentEnum } from 'ascii-table3'
-import fileDirName from './utils/file-dir-name.util'
+import fileDirName from './utils/file-dir-name.util.js'
 import { consola } from 'consola'
 
 const { __dirname } = fileDirName(import.meta)

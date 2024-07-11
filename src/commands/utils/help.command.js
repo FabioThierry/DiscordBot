@@ -4,7 +4,7 @@ import {
     COLORS,
     EMBED_FOOTER_TEXT,
     COMMAND_HELP_COMMANDS_PER_PAGE,
-} from '../../config'
+} from '../../config.js'
 
 export default {
     cooldown: 5,

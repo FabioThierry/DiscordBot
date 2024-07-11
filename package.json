@@ -1,4 +1,5 @@
 {
+    "type": "module",
     "name": "discordbot",
     "version": "2.16.0",
     "description": "A tutorial series for beginners on how to create a Discord bot using NodeJS and Discord.JS library.",
@@ -41,6 +42,5 @@
         "@babel/eslint-parser": "^7.22.11",
         "@babel/plugin-syntax-import-assertions": "^7.22.5",
         "eslint": "^8.48.0"
-    },
-    "type": "module"
+    }
 }

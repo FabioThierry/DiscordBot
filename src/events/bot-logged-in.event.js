@@ -1,7 +1,7 @@
 import { Events } from 'discord.js'
 import chalk from 'chalk'
 import { consola } from 'consola'
-import { GUILD_ID } from '../config'
+import { GUILD_ID } from '../config.js'
 
 export default {
     name: Events.ClientReady,

@@ -5,8 +5,8 @@ import {
     COLORS,
     EMBED_FOOTER_TEXT,
     FORMAT_DATE,
-} from '../../config'
-import dayjs from '../../dayjsSetup'
+} from '../../config.js'
+import dayjs from '../../dayjsSetup.js'
 
 export default {
     cooldown: 0,

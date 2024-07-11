@@ -1,6 +1,6 @@
 import { Collection, Events } from 'discord.js'
 import { consola } from 'consola'
-import { DEFAULT_COMMAND_COOLDOWN } from '../config'
+import { DEFAULT_COMMAND_COOLDOWN } from '../config.js'
 
 export default {
     name: Events.InteractionCreate,
