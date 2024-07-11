@@ -2,10 +2,10 @@
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration.js'
 import relativeTime from 'dayjs/plugin/relativeTime.js'
-import 'dayjs/locale/pl.js'
+import 'dayjs/locale/pt-br.js'
 
 // Set default locale
-dayjs.locale('pl')
+dayjs.locale('pt-br')
 
 // Use the plugins
 dayjs.extend(duration)

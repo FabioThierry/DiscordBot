@@ -4,24 +4,24 @@ export default {
     cooldown: 0,
     data: new SlashCommandBuilder()
         .setName('kick')
-        .setDescription('Wyrzuca gracza z serwera.')
+        .setDescription('Kicks a member from the server.')
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
         .addUserOption((option) =>
             option
                 .setName('user')
-                .setDescription('Użytkownik do wyrzucenia')
+                .setDescription('The user to kick')
                 .setRequired(true),
         )
         .addStringOption((option) =>
-            option.setName('reason').setDescription('Powód wyrzucenia'),
+            option.setName('reason').setDescription('Kick reason'),
         )
         .setDMPermission(false),
 
     async execute(interaction) {
-        const commandUser = interaction.user
+        // const commandUser = interaction.user
         const targetUser = interaction.options.getUser('user')
         const reason =
-            interaction.options.getString('reason') || 'Brak podanego powodu.'
+            interaction.options.getString('reason') || 'No reason provided.'
 
         await interaction.deferReply({ ephemeral: true })
 
@@ -33,32 +33,30 @@ export default {
             .catch(() => null)
 
         if (targetMember == null) {
-            return interaction.editReply(
-                'Użytkownik nie jest członkiem tej gildii!',
-            )
+            return interaction.editReply('User is not a member of this guild!')
         }
 
-        // Sprawdź, czy użytkownik próbuje wyrzucić samego siebie
+        // Check if user is trying to kick themselves
         if (targetUser.id == commandMember.user.id) {
-            return interaction.editReply('Nie możesz wyrzucić samego siebie.')
+            return interaction.editReply('You cannot kick yourself.')
         }
 
-        // Sprawdź, czy użytkownik próbuje wyrzucić tego bota
+        // Check if user is trying to kick the bot
         if (targetUser.id == interaction.client.user.id) {
-            return interaction.editReply('Nie mogę wyrzucić samego siebie.')
+            return interaction.editReply('I cannot kick myself.')
         }
 
-        // Sprawdź uprawnienia użytkownika
+        // Check user permissions
         if (!commandMember.permissions.has(PermissionFlagsBits.KickMembers)) {
             return interaction.editReply(
-                'Nie masz uprawnień do wyrzucenia użytkowników.',
+                'You do not have permissions to kick users.',
             )
         }
 
-        // Sprawdź uprawnienia bota
+        // Check bot permissions
         if (!botMember.permissions.has(PermissionFlagsBits.KickMembers)) {
             return interaction.editReply(
-                'Bot nie ma uprawnień do wyrzucenia użytkowników.',
+                'I do not have permissions to kick users.',
             )
         }
 
@@ -73,32 +71,32 @@ export default {
         //     botHighestRolePosition,
         // )
 
-        // Sprawdź, czy użytkownik ma wyższą/równą rangę niż bot
+        // Check if user has higher or equal role than bot
         if (targetHighestRolePosition >= botHighestRolePosition) {
             return interaction.editReply(
-                'Nie mogę wyrzucić użytkownika o wyższej lub równej roli.',
+                'I cannot kick a user with higher or equal role.',
             )
         }
 
-        // Właściciel serwera zawsze może wyrzucić użytkownika
+        // Server owner can always kick a user
         if (interaction.user.id === interaction.guild.ownerId) {
-            // console.log('Komenda uzyta przez wlasciciela serwera!')
+            // console.log('Command used by server owner!')
             return this.kick(interaction, targetMember, reason)
         }
 
-        // Sprawdź, czy użytkownik do zbanowania ma wyższą/równą rangę niż bot
+        // Check if user to kick has higher or equal role than command user
         if (targetHighestRolePosition >= commandHighestRolePosition) {
             return interaction.editReply(
-                'Nie możesz wyrzucić użytkownika o wyższej lub równej roli.',
+                'You cannot kick a user with higher or equal role.',
             )
         }
 
-        // Sprawdź, czy użytkownika da się wyrzucić
+        // Check if user can be kicked
         if (!targetMember.kickable) {
-            return interaction.editReply('Nie mogę wyrzucić tego użytkownika.')
+            return interaction.editReply('I cannot kick this user.')
         }
 
-        // Wyrzuć użytkownika
+        // Kick user
         await this.kick(interaction, targetMember, reason)
     },
 
@@ -107,11 +105,11 @@ export default {
             await targetMember.kick({ reason })
 
             await interaction.editReply(
-                `Wyrzucono użytkownika ${targetMember.user.tag} z powodem: "${reason}"`,
+                `Kicked user ${targetMember.user.tag} for reason: "${reason}"`,
             )
         } catch (error) {
             interaction.editReply(
-                'Nie można wyrzucić użytkownika! Wystąpił błąd podczas wykonywania tej komendy. Skontaktuj się z deweloperem bota.',
+                'Failed to kick user! An error occurred while executing this command. Please contact the bot developer.',
             )
         }
     },

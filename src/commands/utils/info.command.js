@@ -13,23 +13,25 @@ export default {
     data: new SlashCommandBuilder()
         .setName('info')
         .setDescription(
-            'Wyświetla informacje o deweloperze, wersji, linki pomocnicze i inne...',
+            'Shows information about the developer, version, links and more...',
         )
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('user')
-                .setDescription('Informacje o użytkowniku')
+                .setDescription('Information about a user')
                 .addUserOption((option) =>
-                    option.setName('target').setDescription('Użytkownik'),
+                    option.setName('target').setDescription('User'),
                 ),
         )
         .addSubcommand((subcommand) =>
             subcommand
                 .setName('server')
-                .setDescription('Informacje o serwerze'),
+                .setDescription('Information about the server'),
         )
         .addSubcommand((subcommand) =>
-            subcommand.setName('bot').setDescription('Informacje o bocie'),
+            subcommand
+                .setName('bot')
+                .setDescription('Information about the bot'),
         ),
 
     async execute(interaction) {
@@ -46,7 +48,7 @@ export default {
 
         if (subcommand === 'bot') {
             const embed = new EmbedBuilder()
-                .setTitle('Informacje')
+                .setTitle('Information')
                 .setColor(COLORS.PRIMARY)
                 .setThumbnail(client.user.displayAvatarURL())
                 .setFooter({
@@ -55,12 +57,12 @@ export default {
                 })
                 .addFields([
                     {
-                        name: 'Wersja',
+                        name: 'Version',
                         value: `${packageJson.version}`,
                         inline: true,
                     },
                     {
-                        name: 'Mów mi',
+                        name: 'Call me',
                         value: 'Misio',
                         inline: true,
                     },
@@ -70,12 +72,12 @@ export default {
                         inline: false,
                     },
                     {
-                        name: 'Linki',
+                        name: 'Links',
                         value:
                             // '• [Premium](https://dc.magictm.com/premium)\n' +
-                            // '• [Pomoc](https://dc.magictm.com/blog)\n' +
-                            `• [Zaproś mnie na serwer](${BOT_INVITE_LINK})`,
-                        // '• [Żądanie funkcji / Zgłoszenie błędu](https://dc.magictm.com/feedback)',
+                            // '• [Help](https://dc.magictm.com/blog)\n' +
+                            `• [Invite me to your server](${BOT_INVITE_LINK})`,
+                        // '• [Feature request / Bug report](https://dc.magictm.com/feedback)',
                         inline: true,
                     },
                 ])
@@ -99,7 +101,7 @@ export default {
             // console.log(memberCount, botCount)
 
             const embed = new EmbedBuilder()
-                .setTitle(`Informacje o serwerze ${server.name}`)
+                .setTitle(`Information about the server ${server.name}`)
                 .setColor(COLORS.PRIMARY)
                 .setThumbnail(server.iconURL())
                 .setFooter({
@@ -108,21 +110,21 @@ export default {
                 })
                 .addFields([
                     {
-                        name: 'ID serwera',
+                        name: 'Server ID',
                         value: server.id,
                     },
                     {
-                        name: 'Członkowie',
+                        name: 'Members',
                         value: memberCount.toString(),
                         inline: true,
                     },
                     {
-                        name: 'Boty',
+                        name: 'Bots',
                         value: botCount.toString(),
                         inline: true,
                     },
                     // {
-                    //     name: 'Członkowie (boty)',
+                    //     name: 'Members (bots)',
                     //     value: `${memberCount.toString()} (${botCount.toString()})`,
                     //     inline: true,
                     // },
@@ -131,7 +133,7 @@ export default {
             if (displayOwner) {
                 const owner = await server.fetchOwner()
                 embed.addFields({
-                    name: 'Właściciel',
+                    name: 'Owner',
                     value: `${owner.user.displayName} (ID: ${owner.id})`,
                 })
             }
@@ -149,7 +151,7 @@ export default {
             const member = server.members.cache.get(interaction.user.id)
 
             const embed = new EmbedBuilder()
-                .setTitle(`Informacje o użytkowniku ${user.tag}`)
+                .setTitle(`Information about the user ${user.tag}`)
                 .setColor(COLORS.PRIMARY)
                 .setThumbnail(user.displayAvatarURL())
                 .setFooter({
@@ -158,11 +160,11 @@ export default {
                 })
                 .addFields([
                     {
-                        name: 'Nazwa użytkownika (ID)',
+                        name: 'Username (ID)',
                         value: `${user.username} (${user.id})`,
                     },
                     {
-                        name: 'Członek od',
+                        name: 'Member since',
                         value: `${dayjs(member.joinedTimestamp).format(
                             FORMAT_DATE,
                         )}`,
@@ -174,6 +176,6 @@ export default {
     },
 
     async guildNotAvailable(interaction) {
-        return await interaction.editReply('Gilia jest niedostępna.')
+        return await interaction.editReply('The guild is not available.')
     },
 }

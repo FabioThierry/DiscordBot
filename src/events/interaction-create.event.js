@@ -35,7 +35,7 @@ export default {
             if (now < expirationTime) {
                 const expiredTimestamp = Math.round(expirationTime / 1000)
                 return interaction.reply({
-                    content: `Komendę ${commandName} możesz ponownie użyć <t:${expiredTimestamp}:R>.`,
+                    content: `You can use command ${commandName} again <t:${expiredTimestamp}:R>.`,
                     ephemeral: true,
                 })
             }
@@ -52,7 +52,7 @@ export default {
         } catch (error) {
             consola.error(error)
             await interaction.reply({
-                content: 'Wystąpił błąd podczas wykonywania tego polecenia!',
+                content: 'An error occurred while executing this command!',
                 ephemeral: true,
             })
         }

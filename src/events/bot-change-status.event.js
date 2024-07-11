@@ -6,29 +6,29 @@ const activities = [
     {
         type: ActivityType.Custom,
         name: 'customstatus',
-        state: 'Subskrybuj m7rlin | Poradniki dla Ciebie',
+        state: 'Subscribe to m7rlin | Tutorials for you',
     },
 
     {
         type: ActivityType.Playing,
         name: 'Minecraft',
-        state: 'W grze od 10 minut.',
+        state: 'Playing for 10 minutes.',
     },
     {
         type: ActivityType.Competing,
         name: 'Minecraft',
-        state: 'W grze od 10 minut.',
+        state: 'Playing for 10 minutes.',
     },
     {
         type: ActivityType.Streaming,
         name: 'MagicTM Live',
-        state: 'Na żywo od 10 minut.',
+        state: 'Live streaming for 10 minutes.',
         url: 'https://www.magictm.com',
     },
     {
         type: ActivityType.Watching,
         name: 'YT @m7rlin',
-        state: 'Ogląda wspaniałe poradniki @m7rlin na YouTube.',
+        state: 'Watching amazing tutorials by @m7rlin on YouTube.',
     },
 ]
 
@@ -45,62 +45,21 @@ export default {
         if (BOT_STATUS_INTERVAL > 0) {
             if (BOT_STATUS_INTERVAL < 10) {
                 consola.warn(
-                    `Wartość BOT_STATUS_INTERVAL = ${BOT_STATUS_INTERVAL} mniejsza od 10. Zmienianie statusu może nie działać poprawnie!`,
+                    `The value BOT_STATUS_INTERVAL = ${BOT_STATUS_INTERVAL} is less than 10. The status change may not work correctly!`,
                 )
             }
             return this.initRefreshing(client)
         }
 
-        // const status = await client.user.setActivity({
-        //     type: ActivityType.Custom,
-        //     name: 'customstatus',
-        //     state: 'Subskrybuj m7rlin | Poradniki dla Ciebie',
-        // })
         // Change bot status
         await client.user.setStatus('online')
 
-        // const status = await client.user.setPresence({
-        //     activities: [
-        //         // {
-        //         //     type: ActivityType.Custom,
-        //         //     name: 'customstatus',
-        //         //     state: 'Subskrybuj m7rlin | Poradniki dla Ciebie',
-        //         // },
-
-        //         // {
-        //         //     type: ActivityType.Playing,
-        //         //     name: 'Minecraft',
-        //         //     state: 'W grze od 10 minut.',
-        //         // },
-        //         // {
-        //         //     type: ActivityType.Competing,
-        //         //     name: 'Minecraft',
-        //         //     state: 'W grze od 10 minut.',
-        //         // },
-        //         // {
-        //         //     type: ActivityType.Streaming,
-        //         //     name: 'MagicTM Live',
-        //         //     state: 'Na żywo od 10 minut.',
-        //         //     url: 'https://www.magictm.com',
-        //         // },
-        //         {
-        //             type: ActivityType.Watching,
-        //             name: 'YT @m7rlin',
-        //             state: 'Ogląda wspaniałe poradniki @m7rlin na YouTube.',
-        //         },
-        //     ],
-        //     // “idle”, “dnd”, “online”, or “offline”
-        //     status: 'online',
-        // })
-
-        // console.log('status', status)
-
-        consola.success('Status bota zmieniony pomyślnie.')
+        consola.success('Bot status changed successfully.')
     },
 
     async initRefreshing(client) {
         consola.info(
-            `Rozpoczęto cyklicznką zmianę statusu bota (co ${BOT_STATUS_INTERVAL} sekund).`,
+            `Started cycling status change of the bot (every ${BOT_STATUS_INTERVAL} seconds).`,
         )
 
         let i = 0

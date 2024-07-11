@@ -10,9 +10,9 @@ export default {
     cooldown: 5,
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Wyświetla informacje pomocnicze o komendach.')
+        .setDescription('Shows helpful information about commands.')
         .addIntegerOption((option) =>
-            option.setName('page').setDescription('Strona'),
+            option.setName('page').setDescription('Page number'),
         ),
     async execute(interaction) {
         // /help <page>
@@ -37,15 +37,15 @@ export default {
 
         if (commandList.length === 0) {
             await interaction.editReply(
-                'Nieprawidłowy numer strony. Na tej stronie nie ma żadnych poleceń.',
+                'Invalid page number. There are no commands on this page.',
             )
             return
         }
 
         const embed = new EmbedBuilder()
-            .setTitle('Komendy')
+            .setTitle('Commands')
             .setDescription(
-                `Wyniki \`${commandsCount}\`\nStrona \`${page}/${totalPages}\`: Oto lista dostępnych poleceń:`,
+                `Results \`${commandsCount}\`\nPage \`${page}/${totalPages}\`: Here is a list of available commands:`,
             )
             .setColor(COLORS.INFO)
             // .setThumbnail(client.user.displayAvatarURL())

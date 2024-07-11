@@ -1,86 +1,86 @@
 {
-    "dolnoslaskie": {
-        "name": "Dolnośląskie",
+    "lower_silesian": {
+        "name": "Lower Silesian",
         "weather": {
             "temperature": 20,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     },
-    "kujawsko-pomorskie": {
-        "name": "Kujawsko-pomorskie",
+    "kujavian-pomorian": {
+        "name": "Kujavian-Pomorian",
         "weather": {
             "temperature": 18,
-            "description": "Częściowe zachmurzenie"
+            "description": "Partial cloud cover"
         }
     },
-    "lubelskie": {
-        "name": "Lubelskie",
+    "lubelian": {
+        "name": "Lubelian",
         "weather": {
             "temperature": 16,
-            "description": "Przeważnie pochmurno"
+            "description": "Prevalent cloudiness"
         }
     },
-    "lodzkie": {
-        "name": "Łódzkie",
+    "lodzian": {
+        "name": "Łódzian",
         "weather": {
             "temperature": 17,
-            "description": "Kilka chmurek"
+            "description": "A few clouds"
         }
     },
-    "malopolskie": {
-        "name": "Małopolskie",
+    "little_poland": {
+        "name": "Little Poland",
         "weather": {
             "temperature": 19,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     },
-    "mazowiecki": {
-        "name": "Mazowieckie",
+    "masovian": {
+        "name": "Masovian",
         "weather": {
             "temperature": 21,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     },
-    "podkarpackie": {
-        "name": "Podkarpackie",
+    "podcarpathian": {
+        "name": "Podcarpathian",
         "weather": {
             "temperature": 18,
-            "description": "Częściowe zachmurzenie"
+            "description": "Partial cloud cover"
         }
     },
-    "podlaskie": {
-        "name": "Podlaskie",
+    "podlasian": {
+        "name": "Podlasian",
         "weather": {
             "temperature": 17,
-            "description": "Przeważnie pochmurno"
+            "description": "Prevalent cloudiness"
         }
     },
-    "pomorskie": {
-        "name": "Pomorskie",
+    "pomeranian": {
+        "name": "Pomeranian",
         "weather": {
             "temperature": 20,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     },
-    "slaskie": {
-        "name": "Śląskie",
+    "silesian": {
+        "name": "Silesian",
         "weather": {
             "temperature": 22,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     },
-    "wielkopolskie": {
-        "name": "Wielkopolskie",
+    "great_poland": {
+        "name": "Great Poland",
         "weather": {
             "temperature": 19,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     },
-    "zachodniopomorskie": {
-        "name": "Zachodniopomorskie",
+    "west_pomeranian": {
+        "name": "West Pomeranian",
         "weather": {
             "temperature": 21,
-            "description": "Słonecznie"
+            "description": "Sunny"
         }
     }
 }

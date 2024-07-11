@@ -4,7 +4,7 @@ export default {
     cooldown: 5,
     data: new SlashCommandBuilder()
         .setName('embed')
-        .setDescription('Wyświetla testowy embed.'),
+        .setDescription('Displays a test embed.'),
 
     async execute(interaction) {
         const bot = interaction.client.user
@@ -12,13 +12,13 @@ export default {
 
         const botEmbed = {
             color: 0x9a28fb,
-            title: 'Tytuł',
+            title: 'Title',
             thumbnail: {
                 url: bot.displayAvatarURL(),
             },
             fields: [
                 {
-                    name: 'Nazwa użytkownika',
+                    name: 'Username',
                     value: bot.username,
                     inline: true,
                 },
@@ -32,17 +32,17 @@ export default {
 
         const fields = [
             {
-                name: 'Nazwa użytkownika',
+                name: 'Username',
                 value: user.username,
             },
             {
-                name: 'ID użytkownika',
+                name: 'User ID',
                 value: user.id,
             },
         ]
 
         const userEmbed = new EmbedBuilder()
-            .setTitle(`Informacje o użytkowniku ${user.tag}`)
+            .setTitle(`User information about ${user.tag}`)
             .setColor(0x9a28fb)
             .setThumbnail(user.displayAvatarURL())
             .addFields(fields)

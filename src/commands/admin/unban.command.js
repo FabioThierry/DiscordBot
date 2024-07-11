@@ -5,70 +5,67 @@ export default {
     cooldown: 0,
     data: new SlashCommandBuilder()
         .setName('unban')
-        .setDescription('Odbanowuje gracza z serwera.')
+        .setDescription('Unbans a user from the server.')
         .addUserOption((option) =>
             option
                 .setName('user')
-                .setDescription('Użytkownik do odbanowania')
+                .setDescription('User to unban')
                 .setRequired(true),
         )
         .addStringOption((option) =>
-            option.setName('reason').setDescription('Powód odbanowania'),
+            option.setName('reason').setDescription('Unban reason'),
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDMPermission(false),
 
     async execute(interaction) {
-        // /ban <user> [reason]
+        // /unban <user> [reason]
         const targetUser = interaction.options.getUser('user')
         const reason =
-            interaction.options.getString('reason') || 'Nie podano powodu'
+            interaction.options.getString('reason') || 'No reason provided'
 
         await interaction.deferReply({ ephemeral: true })
 
         const commandMember = interaction.member
         const botMember = interaction.guild.members.me
 
-        // Sprawdź, czy użytkownik próbuje odbanowąć samego siebie
+        // Check if user tries to unban themselves
         if (targetUser.id == commandMember.user.id) {
-            return interaction.editReply('Nie możesz odbanować samego siebie.')
+            return interaction.editReply('You cannot unban yourself.')
         }
 
-        // Sprawdź, czy użytkownik próbuje odbanować tego bota
+        // Check if user tries to unban the bot
         if (targetUser.id == interaction.client.user.id) {
-            return interaction.editReply('Nie mogę odbanować samego siebie.')
+            return interaction.editReply('I cannot unban myself.')
         }
 
-        // Sprawdź uprawnienia użytkownika
+        // Check user permissions
         if (!commandMember.permissions.has(PermissionFlagsBits.BanMembers)) {
             return interaction.editReply(
-                'Nie masz uprawnień do banowania użytkowników.',
+                'You do not have permissions to ban users.',
             )
         }
 
-        // Sprawdź uprawnienia bota
+        // Check bot permissions
         if (!botMember.permissions.has(PermissionFlagsBits.BanMembers)) {
             return interaction.editReply(
-                'Nie mam uprawnień do banowania użytkowników.',
+                'I do not have permissions to ban users.',
             )
         }
 
         const guildBans = await interaction.guild.bans.fetch()
         if (!guildBans.size) {
             return interaction.editReply(
-                'Ta gildia nie posiada zbanowanych użytkowników.',
+                'This server does not have any banned users.',
             )
         }
 
         if (guildBans.has(targetUser.id)) {
-            // console.log('user is banned')
-            // Odbanuj użytkownika
+            // Unban the user
             return this.unbanUser(interaction, targetUser, reason)
         }
 
-        // console.log(guildBans)
-
-        interaction.editReply('Ten użytkownik nie jest zbanowany!')
+        interaction.editReply('This user is not banned!')
     },
 
     async unbanUser(interaction, targetUser, reason) {
@@ -76,12 +73,12 @@ export default {
             await interaction.guild.bans.remove(targetUser.id)
 
             await interaction.editReply(
-                `Odbanowano użytkownika ${targetUser.tag} z powodu: "${reason}"`,
+                `Unbanned user ${targetUser.tag} for reason: "${reason}"`,
             )
         } catch (error) {
             consola.error(error)
             interaction.editReply(
-                'Nie można odbanować użytkownika! Wystąpił błąd podczas wykonywania tej komendy. Skontaktuj się z deweloperem bota.',
+                'Failed to unban user! An error occurred while executing this command. Please contact the bot developer.',
             )
         }
     },
