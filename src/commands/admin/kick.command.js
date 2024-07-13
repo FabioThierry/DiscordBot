@@ -108,6 +108,7 @@ export default {
                 `Kicked user ${targetMember.user.tag} for reason: "${reason}"`,
             )
         } catch (error) {
+            console.error(error)
             interaction.editReply(
                 'Failed to kick user! An error occurred while executing this command. Please contact the bot developer.',
             )

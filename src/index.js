@@ -38,6 +38,8 @@ await Promise.all([
     commandHandler.loadCommand('./commands/admin/purge.command'),
     // Games
     commandHandler.loadCommand('./commands/games/coin-flip.command'),
+    // Scrapers
+    commandHandler.loadCommand('./commands/scrapers/scraper-add.command'),
 ])
 
 commandHandler.displayLoadedCommands()

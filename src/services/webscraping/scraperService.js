@@ -14,14 +14,20 @@ const getScraper = (url) => {
             return new SiteBScraper(url)
         // case siteC.some((site) => url.includes(site)):
         //     return new SiteCScraper(url)
+
         default:
-            throw new Error('No scraper available for this site')
+            return null
+        // throw new Error('No scraper available for this site')
     }
 }
 
 const scrapeWebnovel = async (url) => {
     try {
         const scraper = await getScraper(url)
+        if (scraper === null) {
+            return 'No scraper available for this site'
+            // throw new Error('No scraper available for this site')
+        }
         console.log('webnovel scraper:', scraper)
         const webnovelData = await scraper.scrape()
         console.log('webnovel data:', webnovelData)
@@ -30,12 +36,13 @@ const scrapeWebnovel = async (url) => {
         //     webnovelData.url,
         //     webnovelData.lastChecked,
         // )
+        return webnovelData
     } catch (error) {
         console.error('Error scraping webnovel:', error)
     }
 }
 
-export { scrapeWebnovel }
+export default scrapeWebnovel
 
 // scrapeWebnovel('https://bato.to/series/132934/firefly-wedding')
 // scrapeWebnovel('https://mangatoto.com/series/77447')
@@ -43,4 +50,4 @@ export { scrapeWebnovel }
 // scrapeWebnovel('https://batotoo.com/series/99395/inazuma-to-romance-official')
 // scrapeWebnovel('https://batotoo.com/series/101051')
 
-scrapeWebnovel('https://harimanga.com/manga/i-will-change-the-genre/ ')
+// scrapeWebnovel('https://harimanga.com/manga/i-will-change-the-genre/ ')
