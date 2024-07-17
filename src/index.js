@@ -4,7 +4,39 @@ import packageJson from '../package.json' assert { type: 'json' }
 import CommandHandler from './CommandHandler.js'
 import EventHandler from './EventHandler.js'
 import AntiCrash from './utils/anti-crash.util.js'
-import { TOKEN } from './config.js'
+import { TOKEN, DISCORD_BOT_DATABASE } from './config.js'
+import mongoose from 'mongoose'
+
+import ScrapedReadsData from './models/ScrapedReadsDataModel.js'
+
+const scrapedReadsDataInstance = new ScrapedReadsData()
+
+// Init database
+main()
+    .then(() => {
+        consola.log('Conecxão realizada com sucesso')
+    })
+    .catch((err) =>
+        consola.error('Houve um erro ao conectar ao Banco de dados' + err),
+    )
+async function main() {
+    await mongoose.connect(DISCORD_BOT_DATABASE)
+    const checkForNewChapter = async () => {
+        try {
+            consola.log('Verificando novos capítulos...')
+            const scraper = await scrapedReadsDataInstance.getAllData()
+            if (scraper) {
+                consola.log('Novos capítulos encontrados: ' + scraper)
+            } else {
+                consola.log('Nenhum novo capítulo encontrado')
+            }
+        } catch (error) {
+            consola.error(error)
+        }
+    }
+
+    setInterval(checkForNewChapter, 1000 * 30)
+}
 
 // Anti bot crash system
 AntiCrash.init()

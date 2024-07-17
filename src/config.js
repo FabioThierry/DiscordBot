@@ -44,3 +44,6 @@ export const COLORS = {
 // DATE TIME
 export const FORMAT_DATE = 'D MMMM YYYY'
 export const FORMAT_DATETIME = 'D MMMM YYYY hh:mm:ss'
+
+// DATABASE
+export const DISCORD_BOT_DATABASE = process.env.CONNECTION_STRING
