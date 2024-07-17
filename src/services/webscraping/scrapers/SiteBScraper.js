@@ -11,7 +11,7 @@ export default class SiteBScraper extends ReadingScraper {
      */
     async scrape() {
         try {
-            console.log('Scraping Site B...')
+            // console.log('Scraping Site B...')
 
             // Fetch the HTML content of the webpage
             const $ = await this.fetchData()
@@ -67,7 +67,7 @@ export default class SiteBScraper extends ReadingScraper {
             this.lastChapter.date = releaseDateElement.text().trim()
 
             // Return the scraped data
-            console.log('Data scraped successfully')
+            // console.log('Data scraped successfully')
             return this
         } catch (error) {
             console.error('Error while scraping Bato: ', error)

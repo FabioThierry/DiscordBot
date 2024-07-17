@@ -11,7 +11,7 @@ export default class SiteAScraper extends ReadingScraper {
      */
     async scrape() {
         try {
-            console.log('Scraping Site A...')
+            // console.log('Scraping Site A...')
 
             // Fetch the HTML content of the webpage
             const $ = await this.fetchData()
@@ -67,7 +67,7 @@ export default class SiteAScraper extends ReadingScraper {
                 .trim()
 
             // Return the scraped data
-            console.log('Data scraped successfully')
+            // console.log('Data scraped successfully')
             return this
         } catch (error) {
             console.error('Error while scraping Harimanga: ', error)

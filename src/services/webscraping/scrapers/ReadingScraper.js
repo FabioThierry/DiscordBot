@@ -17,10 +17,10 @@ class ReadingScraper {
     }
 
     async fetchData() {
-        console.log(`Fetching data from ${this.url}...`)
+        // console.log(`Fetching data from ${this.url}...`)
         const response = await axios.get(this.url)
-        console.log('Data fetched successfully.')
-        console.log(`Response data length: ${response.data.length}`)
+        // console.log('Data fetched successfully.')
+        // console.log(`Response data length: ${response.data.length}`)
         return cheerio.load(response.data)
     }
 

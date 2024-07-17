@@ -8,6 +8,7 @@ import { TOKEN, DISCORD_BOT_DATABASE } from './config.js'
 import mongoose from 'mongoose'
 
 import ScrapedReadsData from './models/ScrapedReadsDataModel.js'
+import scrapeWebnovel from './services/webscraping/scraperService.js'
 
 const scrapedReadsDataInstance = new ScrapedReadsData()
 
@@ -26,7 +27,40 @@ async function main() {
             consola.log('Verificando novos capítulos...')
             const scraper = await scrapedReadsDataInstance.getAllData()
             if (scraper) {
-                consola.log('Novos capítulos encontrados: ' + scraper)
+                for (const webnovel of scraper) {
+                    const latestChapter = await scrapeWebnovel(webnovel.url)
+                    if (
+                        webnovel.lastChapter.number !==
+                        latestChapter.lastChapter.number
+                    ) {
+                        webnovel.lastChapter = latestChapter.lastChapter
+                        const updatedData =
+                            await scrapedReadsDataInstance.updateData(
+                                webnovel._id,
+                                webnovel,
+                            )
+                        consola.log('Novo capítulo encontrado!')
+                        const channel = await client.channels.fetch(
+                            updatedData.channelId,
+                        )
+                        if (channel) {
+                            await channel.send(
+                                `New chapter for ${updatedData.title}:\n${updatedData.lastChapter.url}`,
+                            )
+                            console.log(
+                                `Sent new chapter message to ${updatedData.channelId}.`,
+                            )
+                        } else {
+                            console.error(
+                                `Channel ${updatedData.channelId} not found.`,
+                            )
+                        }
+                    } else {
+                        console.log(
+                            `No new chapters found for ${webnovel.title}.`,
+                        )
+                    }
+                }
             } else {
                 consola.log('Nenhum novo capítulo encontrado')
             }
@@ -35,7 +69,7 @@ async function main() {
         }
     }
 
-    setInterval(checkForNewChapter, 1000 * 30)
+    setInterval(checkForNewChapter, 1000 * 60 * 60)
 }
 
 // Anti bot crash system

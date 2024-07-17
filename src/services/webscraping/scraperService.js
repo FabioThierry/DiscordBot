@@ -28,9 +28,9 @@ const scrapeWebnovel = async (url) => {
             return 'No scraper available for this site'
             // throw new Error('No scraper available for this site')
         }
-        console.log('webnovel scraper:', scraper)
+        // console.log('webnovel scraper:', scraper)
         const webnovelData = await scraper.scrape()
-        console.log('webnovel data:', webnovelData)
+        // console.log('webnovel data:', webnovelData)
         // addWebnovel(
         //     webnovelData.title,
         //     webnovelData.url,
