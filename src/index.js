@@ -6,6 +6,7 @@ import EventHandler from './EventHandler.js'
 import AntiCrash from './utils/anti-crash.util.js'
 import { TOKEN, DISCORD_BOT_DATABASE } from './config.js'
 import mongoose from 'mongoose'
+import keep_alive from './keep_alive.js'
 
 import ScrapedReadsData from './models/ScrapedReadsDataModel.js'
 import scrapeWebnovel from './services/webscraping/scraperService.js'
