@@ -31,8 +31,8 @@ async function main() {
                 for (const webnovel of scraper) {
                     const latestChapter = await scrapeWebnovel(webnovel.url)
                     if (
-                        webnovel.lastChapter.number !==
-                        latestChapter.lastChapter.number
+                        webnovel.lastChapter.url !==
+                        latestChapter.lastChapter.url
                     ) {
                         webnovel.lastChapter = latestChapter.lastChapter
                         const updatedData =
