@@ -2,6 +2,7 @@
     "extends": "eslint:recommended",
     "env": {
         "node": true,
+        "browser": true,
         "es6": true
     },
 
@@ -9,9 +10,10 @@
     "parserOptions": {
         "requireConfigFile": false,
         "babelOptions": {
-            "plugins": ["@babel/plugin-syntax-import-assertions"]
+            "plugins": ["@babel/plugin-syntax-import-assertions"],
+            "presets": ["@babel/preset-env"]
         },
-        "ecmaVersion": 2021,
+        "ecmaVersion": "latest",
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
