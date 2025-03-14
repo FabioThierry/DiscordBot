@@ -1,6 +1,6 @@
 import scrapeWebnovel from '../../services/webscraping/scraperService.js'
 import { SlashCommandBuilder } from 'discord.js'
-import ScrapedReadsData from '../../models/ScrapedReadsDataModel.js'
+import ScrapedReadsData from '../../db/models.js'
 
 const scrapedReadsDataInstance = new ScrapedReadsData()
 

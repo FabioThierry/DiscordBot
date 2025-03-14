@@ -1,4 +1,4 @@
-import { ScrapedReadsData } from './models/ScrapedReadsDataModel.js'
+import { ScrapedReadsData } from './db/models.js'
 
 class DataHandler {
     constructor() {

@@ -1,14 +1,18 @@
 import { consola } from 'consola'
 import { Client, GatewayIntentBits } from 'discord.js'
-import packageJson from '../package.json' assert { type: 'json' }
+// import packageJson from '../package.json' assert { type: 'json' } // eslint-disable-line
+// import packageJson from '../package.json'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const packageJson = require('../package.json')
 import CommandHandler from './CommandHandler.js'
 import EventHandler from './EventHandler.js'
 import AntiCrash from './utils/anti-crash.util.js'
 import { TOKEN, DISCORD_BOT_DATABASE } from './config.js'
 import mongoose from 'mongoose'
-import keep_alive from './keep_alive.js'
+// import keep_alive from './keep_alive.js'
 
-import ScrapedReadsData from './models/ScrapedReadsDataModel.js'
+import ScrapedReadsData from './db/models.js'
 import scrapeWebnovel from './services/webscraping/scraperService.js'
 
 const scrapedReadsDataInstance = new ScrapedReadsData()
@@ -76,7 +80,7 @@ async function main() {
 // Anti bot crash system
 AntiCrash.init()
 
-const client = new Client({
+export const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,

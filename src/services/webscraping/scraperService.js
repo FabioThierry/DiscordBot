@@ -21,7 +21,7 @@ const getScraper = (url) => {
     }
 }
 
-const scrapeWebnovel = async (url) => {
+export const scraperUrl = async (url) => {
     try {
         const scraper = await getScraper(url)
         if (scraper === null) {
@@ -42,7 +42,7 @@ const scrapeWebnovel = async (url) => {
     }
 }
 
-export default scrapeWebnovel
+export default scraperUrl
 
 // scrapeWebnovel('https://bato.to/series/132934/firefly-wedding')
 // scrapeWebnovel('https://mangatoto.com/series/77447')
