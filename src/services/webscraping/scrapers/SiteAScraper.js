@@ -1,7 +1,7 @@
-import ReadingScraper from './ReadingScraper.js'
+import DataScraperFetcher from './DataScraperFetcher.js'
 
 // Harimanga Scraper
-export default class SiteAScraper extends ReadingScraper {
+export default class SiteAScraper extends DataScraperFetcher {
     /**
      * Scrapes the Site A webpage and extracts the title, url, image,
      * latest chapter title, chapter number, chapter url and release date.
@@ -10,6 +10,8 @@ export default class SiteAScraper extends ReadingScraper {
      * @throws {Error} If there's an error while scraping
      */
     async scrape() {
+        await this.init()
+
         try {
             // console.log('Scraping Site A...')
 
@@ -24,7 +26,8 @@ export default class SiteAScraper extends ReadingScraper {
 
             // Get the element containing the latest chapter information
             const latestChapterElement = $('.main').first()
-            if (!latestChapterElement) {
+
+            if (latestChapterElement.length === 0) {
                 throw new Error('No latest chapter found')
             }
 
@@ -43,6 +46,7 @@ export default class SiteAScraper extends ReadingScraper {
                 .find('a')
                 .text()
                 .trim()
+
             const chapterNumber = chapterNumberElement
                 .trim()
                 .split(' ')
@@ -52,7 +56,8 @@ export default class SiteAScraper extends ReadingScraper {
             // Convert the chapter number to an integer
             this.lastChapter.number = parseInt(chapterNumber, 10)
             if (isNaN(this.lastChapter.number)) {
-                throw new Error('Invalid chapter number')
+                console.log('Error: Chapter number is NaN, Using Site A')
+                // throw new Error('Invalid chapter number format')
             }
 
             // Get the URL of the latest chapter
@@ -65,6 +70,10 @@ export default class SiteAScraper extends ReadingScraper {
                 .find('i')
                 .text()
                 .trim()
+
+            if (this.lastChapter.date === '') {
+                this.lastChapter.date = 'New Chapter'
+            }
 
             // Return the scraped data
             // console.log('Data scraped successfully')

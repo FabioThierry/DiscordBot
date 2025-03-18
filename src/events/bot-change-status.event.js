@@ -4,31 +4,26 @@ import { BOT_STATUS_ENABLED, BOT_STATUS_INTERVAL } from '../config.js'
 
 const activities = [
     {
-        type: ActivityType.Custom,
+        type: ActivityType.Listening,
         name: 'customstatus',
-        state: 'Subscribe to m7rlin | Tutorials for you',
+        state: 'Ouvindo Musga',
     },
 
     {
         type: ActivityType.Playing,
         name: 'Minecraft',
-        state: 'Playing for 10 minutes.',
-    },
-    {
-        type: ActivityType.Competing,
-        name: 'Minecraft',
-        state: 'Playing for 10 minutes.',
-    },
-    {
-        type: ActivityType.Streaming,
-        name: 'MagicTM Live',
-        state: 'Live streaming for 10 minutes.',
-        url: 'https://www.magictm.com',
+        state: 'Jogando um Minezinho',
     },
     {
         type: ActivityType.Watching,
-        name: 'YT @m7rlin',
-        state: 'Watching amazing tutorials by @m7rlin on YouTube.',
+        name: 'YouTube',
+        state: 'assistindo um vídeo no YouTube.',
+    },
+    {
+        type: ActivityType.Streaming,
+        name: 'Twitch',
+        state: 'Fazendo live no Twitch.',
+        url: 'https://www.twitch.tv/',
     },
 ]
 

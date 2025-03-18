@@ -5,7 +5,14 @@
         "browser": true,
         "es6": true
     },
-
+    "overrides": [
+        {
+            "files": ["tests/**/*"],
+            "env": {
+                "jest": true
+            }
+        }
+    ],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
         "requireConfigFile": false,

@@ -1,53 +1,81 @@
+import ScrapedReadsData from '../../db/models.js'
 import SiteAScraper from './scrapers/SiteAScraper.js'
 import SiteBScraper from './scrapers/SiteBScraper.js'
-// import SiteCScraper from './scrapers/SiteCScraper.js'
-// import { addWebnovel } from '../../models/webnovel.model'
-// import siteConfig from '../../siteConfig'
 
-const siteA = ['harimanga.com']
+const siteA = ['harimanga.com', 'harimanga.me']
 const siteB = ['bato.to', 'mangatoto.com', 'mto.to', 'batotoo.com']
-const getScraper = (url) => {
-    switch (true) {
-        case siteA.some((site) => url.includes(site)):
-            return new SiteAScraper(url)
-        case siteB.some((site) => url.includes(site)):
-            return new SiteBScraper(url)
-        // case siteC.some((site) => url.includes(site)):
-        //     return new SiteCScraper(url)
+// Instancia srapedData localmente
+const srapedData = new ScrapedReadsData()
 
-        default:
-            return null
-        // throw new Error('No scraper available for this site')
-    }
+// Mapeamento de sites para scrapers
+const scraperMap = {
+    siteA: { domains: siteA, Scraper: SiteAScraper },
+    siteB: { domains: siteB, Scraper: SiteBScraper },
 }
 
-export const scraperUrl = async (url) => {
-    try {
-        const scraper = await getScraper(url)
-        if (scraper === null) {
-            return 'No scraper available for this site'
-            // throw new Error('No scraper available for this site')
+// Função para selecionar o scraper
+const scraperSelector = (url) => {
+    for (const [siteKey, { domains, Scraper }] of Object.entries(scraperMap)) {
+        if (domains.some((domain) => url.includes(domain))) {
+            return new Scraper(url)
         }
-        // console.log('webnovel scraper:', scraper)
-        const webnovelData = await scraper.scrape()
-        // console.log('webnovel data:', webnovelData)
-        // addWebnovel(
-        //     webnovelData.title,
-        //     webnovelData.url,
-        //     webnovelData.lastChecked,
-        // )
-        return webnovelData
-    } catch (error) {
-        console.error('Error scraping webnovel:', error)
     }
+    throw new Error(
+        `No scraper available for this site: ${url}. Available scrapers: ${Object.keys(
+            scraperMap,
+        ).join(', ')}`,
+    )
 }
 
-export default scraperUrl
+export const scrapeUrl = async (url) => {
+    try {
+        // console.log('Scraping URL:', url)
+        const scraper = scraperSelector(url)
 
-// scrapeWebnovel('https://bato.to/series/132934/firefly-wedding')
-// scrapeWebnovel('https://mangatoto.com/series/77447')
-// scrapeWebnovel('https://mto.to/series/99955')
-// scrapeWebnovel('https://batotoo.com/series/99395/inazuma-to-romance-official')
-// scrapeWebnovel('https://batotoo.com/series/101051')
+        if (!scraper) {
+            throw new Error('No scraper available for this site')
+        }
 
-// scrapeWebnovel('https://harimanga.com/manga/i-will-change-the-genre/ ')
+        const data = await scraper.scrape()
+
+        return data
+    } catch (error) {
+        console.error('Error scraping URL:', error)
+    }
+}
+export const scrapeAllSites = async () => {
+    try {
+        const sitesToScrape = await srapedData.getAllUrls()
+
+        if (!sitesToScrape || sitesToScrape.length === 0) {
+            console.error('No sites to scrape')
+            return
+        }
+
+        console.log('scrapeAllSites is running')
+
+        // Cria um array de promises para processar todas as URLs simultaneamente
+        const scrapePromises = sitesToScrape.map(async (site) => {
+            try {
+                const data = await scrapeUrl(site.url)
+                return { _id: site._id, url: site.url, data: data }
+            } catch (error) {
+                console.error(`Error scraping URL ${site.url}:`, error)
+                return {
+                    _id: site._id,
+                    url: site.url,
+                    data: null,
+                    error: error.message,
+                }
+            }
+        })
+
+        // Aguarda todas as promises serem resolvidas
+        const allData = await Promise.all(scrapePromises)
+
+        return allData
+    } catch (error) {
+        console.error('Error in scrapeAllSites:', error)
+        throw error
+    }
+}

@@ -6,8 +6,9 @@
     "main": "src/index.js",
     "scripts": {
         "dev": "node --es-module-specifier-resolution=node src/index.js",
-        "dev:watch": "nodemon --es-module-specifier-resolution=node src/index.js",
-        "start": "node src/index.js"
+        "dev:watch": "node --watch --es-module-specifier-resolution=node src/index.js",
+        "start": "node src/index.js",
+        "test": "vitest"
     },
     "dependencies": {
         "ascii-table3": "^0.8.2",
@@ -46,6 +47,6 @@
         "@babel/plugin-syntax-import-assertions": "^7.26.0",
         "@eslint/js": "^9.6.0",
         "eslint": "^9.6.0",
-        "globals": "^15.8.0"
+        "vitest": "^3.0.8"
     }
 }

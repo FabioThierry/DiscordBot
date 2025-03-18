@@ -1,6 +1,6 @@
 // src/models/scrapedData.model.js
 import mongoose from 'mongoose'
-import { ScrapedDataSchema } from '../db/schemas.js'
+import { ScrapedDataSchema } from './schemas.js'
 
 const ScrapedData = mongoose.model('ScrapedReadsData', ScrapedDataSchema)
 
@@ -25,7 +25,6 @@ export default class ScrapedReadsData {
                 newData,
                 { new: true },
             )
-            console.log('Data updated successfully')
             return updatedData
         } catch (error) {
             console.error('Error updating data:', error)
@@ -55,6 +54,28 @@ export default class ScrapedReadsData {
     async getAllData() {
         try {
             const allData = await ScrapedData.find()
+            return allData
+        } catch (error) {
+            console.error('Error getting all data:', error)
+            return []
+        }
+    }
+    async getAllDataFiltered(filter = {}) {
+        try {
+            const allData = await ScrapedData.find(filter)
+            return allData
+        } catch (error) {
+            console.error('Error getting all data:', error)
+            return []
+        }
+    }
+    async getAllUrls() {
+        try {
+            // const allData = await ScrapedData.find()
+            // Busca apenas o campo 'url' de todos os documentos
+            const allData = await ScrapedData.find({}, { url: 1, _id: 1 })
+            // console.log('allData:', allData)
+            // const allUrls = allData.map((data) => data.url)
             return allData
         } catch (error) {
             console.error('Error getting all data:', error)

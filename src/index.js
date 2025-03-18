@@ -1,7 +1,5 @@
 import { consola } from 'consola'
 import { Client, GatewayIntentBits } from 'discord.js'
-// import packageJson from '../package.json' assert { type: 'json' } // eslint-disable-line
-// import packageJson from '../package.json'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 const packageJson = require('../package.json')
@@ -12,69 +10,16 @@ import { TOKEN, DISCORD_BOT_DATABASE } from './config.js'
 import mongoose from 'mongoose'
 // import keep_alive from './keep_alive.js'
 
-import ScrapedReadsData from './db/models.js'
-import scrapeWebnovel from './services/webscraping/scraperService.js'
-
-const scrapedReadsDataInstance = new ScrapedReadsData()
-
 // Init database
 main()
     .then(() => {
-        consola.log('Conecxão realizada com sucesso')
+        consola.info('Conecxão realizada com sucesso')
     })
     .catch((err) =>
         consola.error('Houve um erro ao conectar ao Banco de dados' + err),
     )
 async function main() {
     await mongoose.connect(DISCORD_BOT_DATABASE)
-    const checkForNewChapter = async () => {
-        try {
-            consola.log('Verificando novos capítulos...')
-            const scraper = await scrapedReadsDataInstance.getAllData()
-            if (scraper) {
-                for (const webnovel of scraper) {
-                    const latestChapter = await scrapeWebnovel(webnovel.url)
-                    if (
-                        webnovel.lastChapter.url !==
-                        latestChapter.lastChapter.url
-                    ) {
-                        webnovel.lastChapter = latestChapter.lastChapter
-                        const updatedData =
-                            await scrapedReadsDataInstance.updateData(
-                                webnovel._id,
-                                webnovel,
-                            )
-                        consola.log('Novo capítulo encontrado!')
-                        const channel = await client.channels.fetch(
-                            updatedData.channelId,
-                        )
-                        if (channel) {
-                            await channel.send(
-                                `New chapter for ${updatedData.title}:\n${updatedData.lastChapter.url}`,
-                            )
-                            console.log(
-                                `Sent new chapter message to ${updatedData.channelId}.`,
-                            )
-                        } else {
-                            console.error(
-                                `Channel ${updatedData.channelId} not found.`,
-                            )
-                        }
-                    } else {
-                        console.log(
-                            `No new chapters found for ${webnovel.title}.`,
-                        )
-                    }
-                }
-            } else {
-                consola.log('Nenhum novo capítulo encontrado')
-            }
-        } catch (error) {
-            consola.error(error)
-        }
-    }
-
-    setInterval(checkForNewChapter, 1000 * 60 * 60)
 }
 
 // Anti bot crash system
@@ -109,6 +54,7 @@ await Promise.all([
     commandHandler.loadCommand('./commands/admin/purge.command'),
     // Games
     commandHandler.loadCommand('./commands/games/coin-flip.command'),
+    commandHandler.loadCommand('./commands/games/dices.command'),
     // Scrapers
     commandHandler.loadCommand('./commands/scrapers/scraper-add.command'),
 ])

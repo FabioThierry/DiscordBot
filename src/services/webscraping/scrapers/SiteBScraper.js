@@ -1,7 +1,7 @@
-import ReadingScraper from './ReadingScraper.js'
+import DataScraperFetcher from './DataScraperFetcher.js'
 
 // Batoto Scraper
-export default class SiteBScraper extends ReadingScraper {
+export default class SiteBScraper extends DataScraperFetcher {
     /**
      * Scrapes the Site B webpage and extracts the title, url, image,
      * latest chapter title, chapter number, chapter url and release date.
@@ -10,6 +10,8 @@ export default class SiteBScraper extends ReadingScraper {
      * @throws {Error} If there's an error while scraping
      */
     async scrape() {
+        await this.init()
+
         try {
             // console.log('Scraping Site B...')
 
@@ -24,8 +26,9 @@ export default class SiteBScraper extends ReadingScraper {
 
             // Get the element containing the latest chapter information
             const latestChapterElement = $('.main').first()
+
             if (!latestChapterElement) {
-                throw new Error('No latest chapter found')
+                throw new Error('No latest chapter found on page')
             }
 
             // Get the title of the latest chapter
@@ -34,8 +37,10 @@ export default class SiteBScraper extends ReadingScraper {
                 .first()
                 .find('a')
                 .find('span')
+                .first()
                 .text()
                 .trim()
+                .replace(': ', '')
 
             // Get the chapter number of the latest chapter
             const chapterNumberElement = latestChapterElement
@@ -52,7 +57,7 @@ export default class SiteBScraper extends ReadingScraper {
             // Convert the chapter number to an integer
             this.lastChapter.number = parseInt(chapterNumber, 10)
             if (isNaN(this.lastChapter.number)) {
-                throw new Error('Invalid chapter number')
+                console.log('Error: Chapter number is NaN, Using Site B')
             }
 
             // Get the URL of the latest chapter
@@ -65,6 +70,10 @@ export default class SiteBScraper extends ReadingScraper {
                 '.chapter-release-date',
             )
             this.lastChapter.date = releaseDateElement.text().trim()
+
+            if (this.lastChapter.date === '') {
+                this.lastChapter.date = 'New Chapter'
+            }
 
             // Return the scraped data
             // console.log('Data scraped successfully')

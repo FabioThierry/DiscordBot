@@ -1,4 +1,4 @@
-import scrapeWebnovel from '../../services/webscraping/scraperService.js'
+import { scrapeUrl } from '../../services/webscraping/scraperService.js'
 import { SlashCommandBuilder } from 'discord.js'
 import ScrapedReadsData from '../../db/models.js'
 
@@ -18,9 +18,11 @@ export default {
 
     async execute(interaction) {
         const url = interaction.options.getString('url')
+
         const channelId = interaction.channel.id
-        console.log('channelId', channelId)
-        const scrapedData = await scrapeWebnovel(url)
+
+        const scrapedData = await scrapeUrl(url)
+
         if (scrapedData === 'No scraper available for this site') {
             return await interaction.reply(
                 'Scraper NOT available for this site, please use another command "scrape-add-selector"!',
