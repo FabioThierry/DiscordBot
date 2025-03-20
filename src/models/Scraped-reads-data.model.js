@@ -1,19 +1,36 @@
-// src/models/scrapedData.model.js
 import mongoose from 'mongoose'
-import { ScrapedDataSchema } from './schemas.js'
+
+export const ScrapedDataSchema = new mongoose.Schema({
+    url: { type: String, required: true },
+    title: { type: String, default: '' },
+    img: { type: String, default: '' },
+    lastChapter: {
+        title: { type: String, default: '' },
+        url: { type: String, default: '' },
+        number: { type: Number, default: 0 },
+        date: { type: String, default: '' },
+    },
+    lastCheckedDate: { type: Date, default: Date.now },
+    jobId: { type: Number, default: null },
+    channelId: { type: String, default: '' },
+})
 
 const ScrapedData = mongoose.model('ScrapedReadsData', ScrapedDataSchema)
 
-export default class ScrapedReadsData {
+export class ScrapedReadsData {
     async createData(data, channelId) {
         try {
             data.channelId = channelId
             const newData = new ScrapedData(data)
+            newData.validateSync()
             await newData.save()
-            console.log('Data created successfully')
             return newData
         } catch (error) {
-            console.error('Error creating data:', error)
+            if (error.name === 'ValidationError') {
+                console.error('Validation error:', error.message)
+            } else {
+                console.error('Error creating data:', error)
+            }
             return null
         }
     }
@@ -71,11 +88,8 @@ export default class ScrapedReadsData {
     }
     async getAllUrls() {
         try {
-            // const allData = await ScrapedData.find()
-            // Busca apenas o campo 'url' de todos os documentos
             const allData = await ScrapedData.find({}, { url: 1, _id: 1 })
-            // console.log('allData:', allData)
-            // const allUrls = allData.map((data) => data.url)
+
             return allData
         } catch (error) {
             console.error('Error getting all data:', error)

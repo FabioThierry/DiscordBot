@@ -1,9 +1,10 @@
-import ScrapedReadsData from '../../db/models.js'
-import SiteAScraper from './scrapers/SiteAScraper.js'
-import SiteBScraper from './scrapers/SiteBScraper.js'
+import { ScrapedReadsData } from '../models/Scraped-reads-data.model.js'
+import SiteAScraper from '../scrapers/Site-A.scraper.js'
+import SiteBScraper from '../scrapers/Site-B.scraper.js'
 
 const siteA = ['harimanga.com', 'harimanga.me']
 const siteB = ['bato.to', 'mangatoto.com', 'mto.to', 'batotoo.com']
+
 // Instancia srapedData localmente
 const srapedData = new ScrapedReadsData()
 
@@ -51,8 +52,6 @@ export const scrapeAllSites = async () => {
             console.error('No sites to scrape')
             return
         }
-
-        console.log('scrapeAllSites is running')
 
         // Cria um array de promises para processar todas as URLs simultaneamente
         const scrapePromises = sitesToScrape.map(async (site) => {

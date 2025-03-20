@@ -1,6 +1,6 @@
-import { scrapeUrl } from '../../services/webscraping/scraperService.js'
+import { scrapeUrl } from '../../services/scraper.service.js'
 import { SlashCommandBuilder } from 'discord.js'
-import ScrapedReadsData from '../../db/models.js'
+import { ScrapedReadsData } from '../../models/Scraped-reads-data.model.js'
 
 const scrapedReadsDataInstance = new ScrapedReadsData()
 

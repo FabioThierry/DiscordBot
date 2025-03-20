@@ -1,6 +1,6 @@
 import { consola } from 'consola'
 import { Events, EmbedBuilder } from 'discord.js'
-import UpdateChecker from '../services/webscraping/updateCheker.js'
+import UpdateChecker from '../services/update-cheker.service.js'
 import { GUILD_ID, COLORS } from '../config.js'
 
 export default {
@@ -31,7 +31,7 @@ export default {
                             const updateEmbed = {
                                 title: `📚 Novo Capítulo Disponível: ${update.newData.title}`,
                                 description: `Um novo capítulo de **${update.newData.title}** foi lançado! Confira os detalhes abaixo.`,
-                                color: 0x00ff00, // Green color for updates
+                                color: COLORS.GREEN, // Green color for updates
                                 fields: [
                                     {
                                         name: '📖 Capítulo',
@@ -54,7 +54,7 @@ export default {
 
                                                       hour12: false,
                                                   })
-                                                : `${update.newData.lastChapter}`
+                                                : `${update.newData.lastChapter.date}`
                                         }`,
                                         inline: true,
                                     },
@@ -107,7 +107,7 @@ export default {
                                 title: '⚠️ Aviso: Canal de Notificações Não Encontrado',
                                 description:
                                     'Erro ao verificar atualizações. Para receber as atualizações, crie um canal chamado **"notifications"** no seu servidor do Discord.',
-                                color: 16763904, // Orange color for warnings
+                                color: COLORS.WARNING, // Orange color for warnings
                                 fields: [
                                     {
                                         name: 'Como Resolver',
@@ -134,6 +134,6 @@ export default {
             console.error('Erro ao verificar atualizações:', error)
         }
         // Agenda a próxima execução após 10 segundos
-        setTimeout(() => this.heckUpdatesAndNotify(client), 1000 * 60 * 30) // 30 minutes
+        setTimeout(() => this.heckUpdatesAndNotify(client), 1000 * 60 * 1) // 30 minutes
     }, // Runs every 10 seconds
 }

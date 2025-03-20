@@ -1,12 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
-import SiteBScraper from '../SiteBScraper.js'
+import SiteBScraper from '../Site-B.scraper.js'
 import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 
 vi.mock('axios')
 
-describe('SiteAScraper', () => {
+describe('SiteBScraper', () => {
     it('should scrape data successfully 1 ', async () => {
         // Lendo o arquivo HTML da pasta __mock__
         const htmlPath = path.resolve(__dirname, '__mock__/batoto.html')
@@ -24,10 +24,10 @@ describe('SiteAScraper', () => {
         expect(result.img).toBe(
             'https://n10.mbhiz.org/thumb/W600/ampi/142/1427e9763211f72be8e9a2f7f93e23d993f1c8b8_640_954_402312.jpeg',
         )
-        expect(result.lastChapter.title).toBe('TEMPORARY')
+        expect(result.lastChapter.title).toBe('Chapter 56')
         expect(result.lastChapter.number).toBe(56)
         expect(result.lastChapter.url).toBe('bato.to/chapter/3227046')
-        expect(result.lastChapter.date).toBe('New Chapter')
+        expect(result.lastChapter.date).toBe('20 days ago')
     })
 
     it('should scrape data successfully 2 ', async () => {
@@ -47,12 +47,58 @@ describe('SiteAScraper', () => {
         expect(result.img).toBe(
             'https://n06.mbwnp.org/thumb/W600/ampi/547/54786786ec2f7bc26f36de9719eab38a0a291435_695_1000_145475.jpeg',
         )
-        expect(result.lastChapter.title).toBe(
-            'A surprise attack from the older guy who seems to be a player',
-        )
+        expect(result.lastChapter.title).toBe('Chapter 21')
         expect(result.lastChapter.number).toBe(21)
         expect(result.lastChapter.url).toBe('batotoo.com/chapter/3190083')
-        expect(result.lastChapter.date).toBe('New Chapter')
+        expect(result.lastChapter.date).toBe('47 days ago')
+    })
+
+    it('should scrape data successfully 3 ', async () => {
+        // Lendo o arquivo HTML da pasta __mock__
+        const htmlPath = path.resolve(__dirname, '__mock__/batoto3.html')
+
+        const htmlContent = fs.readFileSync(htmlPath, 'utf-8').trim()
+
+        const testUrl = 'https://bato.to/series/132934/'
+        // Simulando a resposta do axios
+        axios.get.mockResolvedValue({ data: htmlContent })
+
+        const scraper = new SiteBScraper(testUrl)
+        const result = await scraper.scrape()
+
+        expect(result.title).toBe('Firefly Wedding [𝙾𝚏𝚏𝚒𝚌𝚒𝚊𝚕]')
+        expect(result.img).toBe(
+            'https://n10.mbhiz.org/thumb/W600/ampi/142/1427e9763211f72be8e9a2f7f93e23d993f1c8b8_640_954_402312.jpeg',
+        )
+        expect(result.lastChapter.title).toBe('Chapter 57')
+        expect(result.lastChapter.number).toBe(57)
+        expect(result.lastChapter.url).toBe('bato.to/chapter/3257845')
+        expect(result.lastChapter.date).toBe('37 hours ago')
+    })
+
+    it('should scrape data successfully 4', async () => {
+        // Lendo o arquivo HTML da pasta __mock__
+        const htmlPath = path.resolve(__dirname, '__mock__/batoto4.html')
+
+        const htmlContent = fs.readFileSync(htmlPath, 'utf-8').trim()
+
+        const testUrl = 'https://bato.to/series/132934/'
+        // Simulando a resposta do axios
+        axios.get.mockResolvedValue({ data: htmlContent })
+
+        const scraper = new SiteBScraper(testUrl)
+        const result = await scraper.scrape()
+
+        expect(result.title).toBe(
+            'A Timid Lady was Turned into an Ugly Cat, but on the Verge of Fainting is  Picked up by the Most Fearsome Military Duke',
+        )
+        expect(result.img).toBe(
+            'https://n21.mbqgu.org/media/mbim/942/9423f6c1e49e190a9a7df795188be206d50938ec_600_853_673943.jpeg',
+        )
+        expect(result.lastChapter.title).toBe('Volume 3 Chapter 15')
+        expect(result.lastChapter.number).toBe(15)
+        expect(result.lastChapter.url).toBe('bato.to/chapter/3147796')
+        expect(result.lastChapter.date).toBe('82 days ago')
     })
 
     // it('should throw an error if no latest chapter is found', async () => {

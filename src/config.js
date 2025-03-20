@@ -39,6 +39,7 @@ export const COLORS = {
     FUCHSIA: 0xe879f9,
     VIOLET: 0xa78bfa,
     INDIGO: 0x818cf8,
+    GREEN: 0xfff000,
 }
 
 // DATE TIME

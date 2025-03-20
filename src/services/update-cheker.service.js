@@ -1,5 +1,5 @@
-import ScrapedReadsData from '../../db/models.js'
-import { scrapeAllSites } from './scraperService.js'
+import { ScrapedReadsData } from '../models/Scraped-reads-data.model.js'
+import { scrapeAllSites } from './scraper.service.js'
 
 export default class UpdateChecker {
     static async checkUpdates() {

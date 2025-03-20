@@ -6,25 +6,16 @@ const packageJson = require('../package.json')
 import CommandHandler from './CommandHandler.js'
 import EventHandler from './EventHandler.js'
 import AntiCrash from './utils/anti-crash.util.js'
-import { TOKEN, DISCORD_BOT_DATABASE } from './config.js'
-import mongoose from 'mongoose'
+import { TOKEN } from './config.js'
+import db from './db.js'
+
 // import keep_alive from './keep_alive.js'
 
-// Init database
-main()
-    .then(() => {
-        consola.info('Conecxão realizada com sucesso')
-    })
-    .catch((err) =>
-        consola.error('Houve um erro ao conectar ao Banco de dados' + err),
-    )
-async function main() {
-    await mongoose.connect(DISCORD_BOT_DATABASE)
-}
+// Database connection
+db.connect()
 
 // Anti bot crash system
 AntiCrash.init()
-
 export const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
