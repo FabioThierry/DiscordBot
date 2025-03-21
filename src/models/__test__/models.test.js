@@ -38,13 +38,10 @@ describe('ScrapedReadsData', () => {
                 date: '2023-10-01',
             },
             jobId: 123,
+            channelId: 'channel1',
         }
-        const channelId = 'test-channel-id'
 
-        const createdData = await scrapedReadsData.createData(
-            testData,
-            channelId,
-        )
+        const createdData = await scrapedReadsData.createData(testData)
 
         // Verifica se os dados foram criados corretamente
         expect(createdData).toBeDefined()
@@ -56,7 +53,7 @@ describe('ScrapedReadsData', () => {
         expect(createdData.lastChapter.number).toBe(testData.lastChapter.number)
         expect(createdData.lastChapter.date).toBe(testData.lastChapter.date)
         expect(createdData.jobId).toBe(testData.jobId)
-        expect(createdData.channelId).toBe(channelId)
+        expect(createdData.channelId).toBe(testData.channelId)
     })
 })
 

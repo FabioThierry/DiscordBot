@@ -18,9 +18,8 @@ export const ScrapedDataSchema = new mongoose.Schema({
 const ScrapedData = mongoose.model('ScrapedReadsData', ScrapedDataSchema)
 
 export class ScrapedReadsData {
-    async createData(data, channelId) {
+    async createData(data) {
         try {
-            data.channelId = channelId
             const newData = new ScrapedData(data)
             newData.validateSync()
             await newData.save()

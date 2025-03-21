@@ -4,11 +4,11 @@
 
 ### [x] construir o embed de mensagens automaticas
 
-### [] criar um parserhtml
+### [x] criar um parserhtml
 
-### [] alterar o local dos scripts de scraping
+### [x] alterar o local dos scripts de scraping
 
-### [] verificar a necessidade do data Handler
+### [x] verificar a necessidade do data Handler
 
 ### [] adicionar um novo comando para adicionar novos sites
 

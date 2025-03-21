@@ -134,6 +134,6 @@ export default {
             console.error('Erro ao verificar atualizações:', error)
         }
         // Agenda a próxima execução após 10 segundos
-        setTimeout(() => this.heckUpdatesAndNotify(client), 1000 * 60 * 1) // 30 minutes
+        setTimeout(() => this.heckUpdatesAndNotify(client), 1000 * 60 * 30) // 30 minutes
     }, // Runs every 10 seconds
 }
