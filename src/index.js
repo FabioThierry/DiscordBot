@@ -48,6 +48,8 @@ await Promise.all([
     commandHandler.loadCommand('./commands/games/dices.command'),
     // Scrapers
     commandHandler.loadCommand('./commands/scrapers/scraper-add.command'),
+    commandHandler.loadCommand('./commands/scrapers/check-updates.command'),
+    commandHandler.loadCommand('./commands/scrapers/list-scrapers.command'),
 ])
 
 commandHandler.displayLoadedCommands()

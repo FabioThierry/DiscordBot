@@ -43,8 +43,19 @@ export const COLORS = {
 }
 
 // DATE TIME
-export const FORMAT_DATE = 'D MMMM YYYY'
-export const FORMAT_DATETIME = 'D MMMM YYYY hh:mm:ss'
+export const FORMAT_DATE = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+}
+export const FORMAT_DATETIME = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+}
 
 // DATABASE
 export const DISCORD_BOT_DATABASE = process.env.CONNECTION_STRING
