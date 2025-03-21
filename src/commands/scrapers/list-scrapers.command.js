@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
 import { ScrapedReadsData } from '../../models/Scraped-reads-data.model.js'
-import { FORMAT_DATETIME } from '../../config.js'
+import { COLORS, FORMAT_DATETIME } from '../../config.js'
 
 const scrapedReadsDataInstance = new ScrapedReadsData()
 
@@ -22,54 +22,48 @@ export default {
             const scrapers = await scrapedReadsDataInstance.getAllData()
 
             if (scrapers && scrapers.length > 0) {
-                // Cria um embed para listar os scrapers
-                const listEmbed = new EmbedBuilder()
-                    .setColor('#00ff00') // Verde para sucesso
-                    .setTitle('📋 Scrapers Cadastrados')
-                    .setDescription(
-                        'Aqui está a lista de todos os scrapers cadastrados:',
-                    )
-                    .setFooter({
-                        text: 'Comando: list-scrapers',
-                        iconURL: 'https://example.com/icon.png',
-                    })
-                    .setTimestamp()
-                // Limit to 25 items (Discord's maximum fields per embed)
-                const maxItems = Math.min(scrapers.length, 25)
+                // Divide os scrapers em grupos de 10 (ou outro número)
+                const chunkSize = 10 // Número de scrapers por embed
+                for (let i = 0; i < scrapers.length; i += chunkSize) {
+                    const chunk = scrapers.slice(i, i + chunkSize)
 
-                // Update description to indicate if there are more items
-                if (scrapers.length > 25) {
-                    listEmbed.setDescription(
-                        `Mostrando 25 de ${scrapers.length} scrapers cadastrados (limite do Discord).`,
-                    )
-                } else {
-                    listEmbed.setDescription(
-                        `Aqui está a lista de todos os ${scrapers.length} scrapers cadastrados:`,
-                    )
+                    // Cria um embed para o grupo atual
+                    const listEmbed = new EmbedBuilder()
+                        .setColor('#00ff00') // Verde para sucesso
+                        .setTitle('📋 Scrapers Cadastrados')
+                        .setDescription(
+                            `Aqui está a lista de scrapers (${
+                                i + 1
+                            } a ${Math.min(i + chunkSize, scrapers.length)}):`,
+                        )
+                        .addFields(
+                            chunk.map((scraper) => ({
+                                name: ``,
+                                value: `[**${scraper.title}**](${
+                                    scraper.url
+                                })\n*📅  Última verificação: ${new Date(
+                                    scraper.lastCheckedDate,
+                                ).toLocaleString('pt-BR', {
+                                    FORMAT_DATETIME,
+                                })}*\n`,
+                                inline: false,
+                            })),
+                        )
+                        .setThumbnail(
+                            'https://preview.redd.it/the-best-form-of-glados-potato-glados-v0-ggxpi4yw29ma1.png?width=1080&crop=smart&auto=webp&s=6767adff011ffe9105e2e271176d98bd2860e570',
+                        ) // Thumbnail geral do embed
+                        .setFooter({
+                            text: `Página ${
+                                Math.floor(i / chunkSize) + 1
+                            } de ${Math.ceil(scrapers.length / chunkSize)}`,
+                            iconURL:
+                                'https://preview.redd.it/the-best-form-of-glados-potato-glados-v0-ggxpi4yw29ma1.png?width=1080&crop=smart&auto=webp&s=6767adff011ffe9105e2e271176d98bd2860e570',
+                        })
+                        .setTimestamp()
+
+                    // Envia o embed com o grupo atual de scrapers
+                    await interaction.followUp({ embeds: [listEmbed] })
                 }
-
-                // Add only up to 25 fields
-                const fieldsToAdd = []
-                for (let i = 0; i < maxItems; i++) {
-                    const scraper = scrapers[i]
-                    const truncatedTitle =
-                        scraper.title.length > 25
-                            ? `${scraper.title.substring(0, 22)}...`
-                            : scraper.title
-
-                    fieldsToAdd.push({
-                        name: truncatedTitle,
-                        value: `📅 Última verificação: ${new Date(
-                            scraper.lastCheckedDate,
-                        ).toLocaleString('pt-BR', FORMAT_DATETIME)}`,
-                        inline: false,
-                    })
-                }
-
-                listEmbed.addFields(fieldsToAdd)
-
-                // Envia o embed com a lista de scrapers
-                await interaction.followUp({ embeds: [listEmbed] })
             } else {
                 // Se não houver scrapers cadastrados
                 const noScrapersEmbed = new EmbedBuilder()
@@ -78,7 +72,8 @@ export default {
                     .setDescription('Não há scrapers cadastrados no momento.')
                     .setFooter({
                         text: 'Comando: list-scrapers',
-                        iconURL: 'https://example.com/icon.png',
+                        iconURL:
+                            'https://preview.redd.it/the-best-form-of-glados-potato-glados-v0-ggxpi4yw29ma1.png?width=1080&crop=smart&auto=webp&s=6767adff011ffe9105e2e271176d98bd2860e570',
                     })
                     .setTimestamp()
 
@@ -96,7 +91,8 @@ export default {
                 )
                 .setFooter({
                     text: 'Comando: list-scrapers',
-                    iconURL: 'https://example.com/icon.png',
+                    iconURL:
+                        'https://preview.redd.it/the-best-form-of-glados-potato-glados-v0-ggxpi4yw29ma1.png?width=1080&crop=smart&auto=webp&s=6767adff011ffe9105e2e271176d98bd2860e570',
                 })
                 .setTimestamp()
 

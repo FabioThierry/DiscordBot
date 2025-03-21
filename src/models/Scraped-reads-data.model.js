@@ -34,6 +34,16 @@ export class ScrapedReadsData {
         }
     }
 
+    async getDataByTitle(title) {
+        try {
+            const data = await ScrapedData.findOne({ title })
+            return data
+        } catch (error) {
+            console.error('Error fetching data by title:', error)
+            return null
+        }
+    }
+
     async updateData(id, newData) {
         try {
             const updatedData = await ScrapedData.findByIdAndUpdate(
@@ -50,8 +60,9 @@ export class ScrapedReadsData {
 
     async deleteData(id) {
         try {
-            await ScrapedData.findByIdAndDelete(id)
+            const deletedData = await ScrapedData.findByIdAndDelete(id)
             console.log('Data deleted successfully')
+            return deletedData
         } catch (error) {
             console.error('Error deleting data:', error)
         }
