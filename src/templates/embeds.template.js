@@ -58,10 +58,10 @@ export function createNoUpdatesEmbed() {
         .setColor(COLORS.WARNING)
         .setTitle('⚠️ Nenhuma Atualização Encontrada')
         .setDescription('Não foram encontradas novas atualizações no momento.')
-        .setThumbnail(config.botUrlImage)
+
         .setFooter({
             text: 'Comando: check-updates',
-            iconURL: config.botUrlImage,
+            iconURL: BOT_AVATAR,
         })
         .setTimestamp()
 }
