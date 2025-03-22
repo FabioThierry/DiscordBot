@@ -59,3 +59,8 @@ export const FORMAT_DATETIME = {
 
 // DATABASE
 export const DISCORD_BOT_DATABASE = process.env.CONNECTION_STRING
+
+// BOT
+export const BOT_NAME = 'LêBOT'
+export const BOT_AVATAR =
+    'https://playableconcepts.aalto.fi/wp-content/uploads/2020/11/Pixel_Robot.gif'

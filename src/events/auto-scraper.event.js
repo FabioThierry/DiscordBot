@@ -1,5 +1,5 @@
 import { consola } from 'consola'
-import { Events, EmbedBuilder } from 'discord.js'
+import { Events } from 'discord.js'
 import UpdateChecker from '../services/update-cheker.service.js'
 import { GUILD_ID, COLORS } from '../config.js'
 import { createUpdateEmbed } from '../templates/embeds.template.js'
@@ -29,71 +29,6 @@ export default {
                     // If updates are found, send them as embeds
                     if (updates && updates.length > 0) {
                         for (const update of updates) {
-                            // const updateEmbed = {
-                            //     title: `📚 Novo Capítulo Disponível: ${update.newData.title}`,
-                            //     description: `Um novo capítulo de **${update.newData.title}** foi lançado! Confira os detalhes abaixo.`,
-                            //     color: COLORS.GREEN, // Green color for updates
-                            //     fields: [
-                            //         {
-                            //             name: '📖 Capítulo',
-                            //             value: `**${update.newData.lastChapter.number} - ${update.newData.lastChapter.title}**`,
-                            //             inline: true,
-                            //         },
-                            //         {
-                            //             name: '📅 Data',
-                            //             value: `${
-                            //                 update.newData.lastChapter.date ===
-                            //                 'New Chapter'
-                            //                     ? new Date(
-                            //                           Date.now(),
-                            //                       ).toLocaleString('pt-BR', {
-                            //                           year: 'numeric',
-                            //                           month: '2-digit',
-                            //                           day: '2-digit',
-                            //                           hour: '2-digit',
-                            //                           minute: '2-digit',
-
-                            //                           hour12: false,
-                            //                       })
-                            //                     : `${update.newData.lastChapter.date}`
-                            //             }`,
-                            //             inline: true,
-                            //         },
-                            //         {
-                            //             name: '🔗 Link do Capítulo',
-                            //             value: `[Clique aqui para ler](${
-                            //                 update.newData.lastChapter.url.startsWith(
-                            //                     'https://',
-                            //                 )
-                            //                     ? update.newData.lastChapter.url
-                            //                     : `https://${update.newData.lastChapter.url}`
-                            //             })`,
-                            //             inline: false,
-                            //         },
-                            //         {
-                            //             name: '🌐 Série',
-                            //             value: `[Visitar página da série](${update.url})`,
-                            //             inline: false,
-                            //         },
-                            //     ],
-                            //     thumbnail: {
-                            //         url: update.newData.img, // Thumbnail of the series
-                            //     },
-                            //     footer: {
-                            //         text: `Última verificação: ${new Date(
-                            //             update.newData.lastCheckedDate,
-                            //         ).toLocaleString('pt-BR', {
-                            //             year: 'numeric',
-                            //             month: '2-digit',
-                            //             day: '2-digit',
-                            //             hour: '2-digit',
-                            //             minute: '2-digit',
-                            //             hour12: false,
-                            //         })}`,
-                            //     },
-                            //     timestamp: new Date().toISOString(),
-                            // }
-
                             const updateEmbed = createUpdateEmbed(update)
 
                             // Send the embed to the notifications channel

@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js'
-import { COLORS, FORMAT_DATETIME } from '../config.js'
+import { COLORS, FORMAT_DATE, FORMAT_DATETIME, BOT_AVATAR } from '../config.js'
 
 // Embed para atualizações encontradas
 export function createUpdateEmbed(update) {
@@ -19,15 +19,10 @@ export function createUpdateEmbed(update) {
                 name: '📅 Data',
                 value: `${
                     update.newData.lastChapter.date === 'New Chapter'
-                        ? new Date(Date.now()).toLocaleString('pt-BR', {
-                              year: 'numeric',
-                              month: '2-digit',
-                              day: '2-digit',
-                              hour: '2-digit',
-                              minute: '2-digit',
-
-                              hour12: false,
-                          })
+                        ? new Date(Date.now()).toLocaleString(
+                              'pt-BR',
+                              FORMAT_DATETIME,
+                          )
                         : `${update.newData.lastChapter.date}`
                 }`,
                 inline: true,
@@ -49,7 +44,10 @@ export function createUpdateEmbed(update) {
         )
         .setThumbnail(update.newData.img) // Thumbnail da série
         .setFooter({
-            text: new Date(Date.now()).toLocaleString('pt-BR', FORMAT_DATETIME),
+            text: `Última verificação: ${new Date(
+                update.newData.lastCheckedDate,
+            ).toLocaleString('pt-BR', FORMAT_DATE)}`,
+            iconURL: BOT_AVATAR,
         })
         .setTimestamp(new Date(Date.now()))
 }
@@ -57,12 +55,13 @@ export function createUpdateEmbed(update) {
 // Embed para nenhuma atualização encontrada
 export function createNoUpdatesEmbed() {
     return new EmbedBuilder()
-        .setColor('#ffff00') // Amarelo para aviso
+        .setColor(COLORS.WARNING)
         .setTitle('⚠️ Nenhuma Atualização Encontrada')
         .setDescription('Não foram encontradas novas atualizações no momento.')
+        .setThumbnail(config.botUrlImage)
         .setFooter({
             text: 'Comando: check-updates',
-            iconURL: 'https://example.com/icon.png',
+            iconURL: config.botUrlImage,
         })
         .setTimestamp()
 }
@@ -70,22 +69,23 @@ export function createNoUpdatesEmbed() {
 // Embed para erro ao verificar atualizações
 export function createErrorEmbed() {
     return new EmbedBuilder()
-        .setColor('#ff0000') // Vermelho para erro
+        .setColor(COLORS.DANGER) // Vermelho para erro
         .setTitle('❌ Erro ao Verificar Atualizações')
         .setDescription(
             'Ocorreu um erro ao tentar verificar as atualizações. Por favor, tente novamente mais tarde.',
         )
         .setFooter({
             text: 'Comando: check-updates',
-            iconURL: 'https://example.com/icon.png',
+            iconURL: BOT_AVATAR,
         })
+        .setThumbnail(BOT_AVATAR)
         .setTimestamp()
 }
 
 // Embed para "Scraper Adicionado com Sucesso"
 export function createScraperSuccessEmbed(scrapedDataAdded, url) {
     return new EmbedBuilder()
-        .setColor('#00ff00') // Verde para sucesso
+        .setColor(COLORS.GREEN) // Verde para sucesso
         .setTitle('✅ Scraper Adicionado com Sucesso')
         .setDescription(
             `O scraper **${scrapedDataAdded.title}** foi adicionado com sucesso!`,
@@ -105,7 +105,7 @@ export function createScraperSuccessEmbed(scrapedDataAdded, url) {
         .setThumbnail('https://example.com/success-icon.png')
         .setFooter({
             text: 'Comando: scraper-add',
-            iconURL: 'https://example.com/icon.png',
+            iconURL: BOT_AVATAR,
         })
         .setTimestamp()
 }
