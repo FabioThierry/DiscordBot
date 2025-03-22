@@ -1,13 +1,23 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
+import {
+    describe,
+    it,
+    expect,
+    beforeAll,
+    afterAll,
+    beforeEach,
+    spyOn,
+} from 'vitest'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import {
     ScrapedReadsData,
     ScrapedDataSchema,
-} from '../Scraped-reads-data.model.js' // Ajuste o caminho conforme necessário
+} from '../scraped-reads-data.model.js'
 
 // Cria uma instância do MongoDB em memória
 let mongoServer
+let scrapedReadsData
+let validData
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
@@ -15,142 +25,181 @@ beforeAll(async () => {
     await mongoose.connect(uri)
 })
 
-beforeEach(async () => {
-    // await Contact.deleteMany();
-})
-
 afterAll(async () => {
     await mongoose.disconnect()
     await mongoServer.stop()
 })
+beforeEach(async () => {
+    await mongoose.connection.db.dropDatabase()
+    scrapedReadsData = new ScrapedReadsData()
+    validData = {
+        url: 'https://example.com',
+        title: 'Example Title',
+        img: 'https://example.com/image.png',
+        lastChapter: {
+            title: 'Chapter 1',
+            url: 'https://example.com/chapter1',
+            number: 1,
+            date: '2023-10-01',
+        },
+        jobId: 123,
+        channelId: 'channel1',
+    }
+})
 
-describe('ScrapedReadsData', () => {
+describe('Create Data in ScrapedReadsData', () => {
     it('should create data successfully', async () => {
-        const scrapedReadsData = new ScrapedReadsData()
+        const createdData = await scrapedReadsData.createData(validData)
+
+        // Verifica se os dados foram criados corretamente
+        expect(createdData).toBeDefined()
+        expect(createdData.url).toBe(validData.url)
+        expect(createdData.title).toBe(validData.title)
+        expect(createdData.img).toBe(validData.img)
+        expect(createdData.lastChapter.title).toBe(validData.lastChapter.title)
+        expect(createdData.lastChapter.url).toBe(validData.lastChapter.url)
+        expect(createdData.lastChapter.number).toBe(
+            validData.lastChapter.number,
+        )
+        expect(createdData.lastChapter.date).toBe(validData.lastChapter.date)
+        expect(createdData.jobId).toBe(validData.jobId)
+        expect(createdData.channelId).toBe(validData.channelId)
+    })
+
+    it('should handle error when creating data', async () => {
+        const data = { title: 'Invalid Data' }
+
+        const createdData = await scrapedReadsData.createData(data)
+
+        expect(createdData).toBeNull()
+    })
+    it('should throw a validation error if lastChapter.number is not a valid number', async () => {
         const testData = {
             url: 'https://example.com',
-            title: 'Example Title',
-            img: 'https://example.com/image.png',
             lastChapter: {
-                title: 'Chapter 1',
-                url: 'https://example.com/chapter1',
-                number: 1,
-                date: '2023-10-01',
+                number: 'abc', // Valor inválido
             },
-            jobId: 123,
-            channelId: 'channel1',
         }
 
         const createdData = await scrapedReadsData.createData(testData)
 
-        // Verifica se os dados foram criados corretamente
-        expect(createdData).toBeDefined()
-        expect(createdData.url).toBe(testData.url)
-        expect(createdData.title).toBe(testData.title)
-        expect(createdData.img).toBe(testData.img)
-        expect(createdData.lastChapter.title).toBe(testData.lastChapter.title)
-        expect(createdData.lastChapter.url).toBe(testData.lastChapter.url)
-        expect(createdData.lastChapter.number).toBe(testData.lastChapter.number)
-        expect(createdData.lastChapter.date).toBe(testData.lastChapter.date)
-        expect(createdData.jobId).toBe(testData.jobId)
-        expect(createdData.channelId).toBe(testData.channelId)
+        // Verifica se o retorno é null (indicando que houve um erro)
+        expect(createdData).toBeNull()
     })
 })
 
-it('should throw a validation error if lastChapter.number is not a valid number', async () => {
-    const scrapedReadsData = new ScrapedReadsData()
-    const testData = {
-        url: 'https://example.com',
-        lastChapter: {
-            number: 'abc', // Valor inválido
-        },
-    }
-    const channelId = 'test-channel-id'
+describe('Update Data in ScrapedReadsData', () => {
+    it('should update data successfully', async () => {
+        // Cria um documento inicial
 
-    const createdData = await scrapedReadsData.createData(testData, channelId)
+        const createdData = await scrapedReadsData.createData(validData)
 
-    // Verifica se o retorno é null (indicando que houve um erro)
-    expect(createdData).toBeNull()
+        // Dados para atualização
+        const updateData = {
+            title: 'Updated Title',
+            lastChapter: {
+                number: 2,
+            },
+        }
+
+        // Atualiza o documento
+        const updatedData = await scrapedReadsData.updateData(
+            createdData._id,
+            updateData,
+        )
+
+        // Verifica se os dados foram atualizados corretamente
+        expect(updatedData).toBeDefined()
+        expect(updatedData.title).toBe(updateData.title)
+        expect(updatedData.lastChapter.number).toBe(
+            updateData.lastChapter.number,
+        )
+    })
+
+    it('should return null if the document does not exist', async () => {
+        // Tenta atualizar um documento inexistente
+        const nonExistentId = new mongoose.Types.ObjectId() // Gera um ID que não existe
+        const updateData = {
+            title: 'Updated Title',
+        }
+
+        const updatedData = await scrapedReadsData.updateData(
+            nonExistentId,
+            updateData,
+        )
+
+        // Verifica se o retorno é null (documento não encontrado)
+        expect(updatedData).toBeNull()
+    })
+
+    it('should throw a validation error if the data is invalid', async () => {
+        // Cria um documento inicial
+        const initialData = {
+            url: 'https://example.com',
+            title: 'Initial Title',
+            lastChapter: {
+                number: 1,
+            },
+            channelId: 'test-channel-id',
+        }
+        const createdData = await scrapedReadsData.createData(
+            initialData,
+            'test-channel-id',
+        )
+
+        // Tenta atualizar com dados inválidos (lastChapter.number como string não numérica)
+        const invalidUpdateData = {
+            lastChapter: {
+                number: 'abc', // Valor inválido
+            },
+        }
+
+        const updatedData = await scrapedReadsData.updateData(
+            createdData._id,
+            invalidUpdateData,
+        )
+
+        // Verifica se o retorno é null (erro de validação)
+        expect(updatedData).toBeNull()
+    })
 })
 
-// import { describe, it, expect, vi } from 'vitest'
-// import mongoose from 'mongoose'
-// import ScrapedReadsData from '../models.js'
+describe('Delete Data in ScrapedReadsData', () => {
+    it('should delete data successfully', async () => {
+        // Cria um documento inicial
+        const createdData = await scrapedReadsData.createData(validData)
 
-// vi.mock('mongoose', async (importOriginal) => {
-//     const actual = await importOriginal()
-//     const mModel = {
-//         save: vi.fn(),
-//         findByIdAndUpdate: vi.fn(),
-//         findByIdAndDelete: vi.fn(),
-//         findById: vi.fn(),
-//         find: vi.fn(),
-//     }
-//     return {
-//         ...actual,
-//         model: vi.fn((name) => {
-//             if (name === 'ScrapedReadsData') {
-//                 return mModel
-//             }
-//             return actual.model(name)
-//         }),
-//         Schema: actual.Schema,
-//     }
-// })
+        // Deleta o documento
+        const deletedData = await scrapedReadsData.deleteData(createdData._id)
 
-// describe('ScrapedReadsData', () => {
-//     const scrapedReadsData = new ScrapedReadsData()
+        // Verifica se o retorno é o documento deletado
+        expect(deletedData).toBeDefined()
+    })
 
-//     it('should create data successfully', async () => {
-//         const data = { url: 'http://example.com' }
-//         const channelId = '12345'
-//         const newData = { ...data, channelId }
-//         vi.spyOn(mongoose.model('ScrapedReadsData').mockResolvedValue(newData))
+    it('should return null if the document does not exist', async () => {
+        // Tenta deletar um documento inexistente
+        const nonExistentId = new mongoose.Types.ObjectId() // Gera um ID que não existe
+        const deletedData = await scrapedReadsData.deleteData(nonExistentId)
 
-//         const result = await scrapedReadsData.createData(data, channelId)
+        // Verifica se o retorno é null (documento não encontrado)
+        expect(deletedData).toBeNull()
+    })
 
-//         expect(result).toEqual(newData)
-//         expect(mongoose.model('ScrapedReadsData').save).toHaveBeenCalled()
-//     })
+    // it('should handle errors during deletion', async () => {
+    //     // Simula um erro durante a exclusão
+    //     spyOn(mongoose.Model, 'findByIdAndDelete').mockImplementationOnce(
+    //         () => {
+    //             throw new Error('Database error')
+    //         },
+    //     )
 
-//     it('should handle error when creating data', async () => {
-//         const data = { url: 'http://example.com' }
-//         const channelId = '12345'
-//         const ScrapedReadsDataMock = vi
-//             .spyOn(mongoose.Model.prototype, 'save')
-//             .mockRejectedValue(new Error('Error creating data'))
+    //     const nonExistentId = new mongoose.Types.ObjectId()
+    //     const deletedData = await scrapedReadsData.deleteData(nonExistentId)
 
-//         expect(result).toBeNull()
-//     })
-
-//     it('should update data successfully', async () => {
-//         const id = '12345'
-//         const newData = { url: 'http://example.com/updated' }
-//         mongoose
-//             .model('ScrapedReadsData')
-//             .findByIdAndUpdate.mockResolvedValue(newData)
-
-//         const result = await scrapedReadsData.updateData(id, newData)
-
-//         expect(result).toEqual(newData)
-//         expect(
-//             mongoose.model('ScrapedReadsData').findByIdAndUpdate,
-//         ).toHaveBeenCalledWith(id, newData, { new: true })
-//     })
-
-//     it('should handle error when updating data', async () => {
-//         const id = '12345'
-//         const newData = { url: 'http://example.com/updated' }
-//         mongoose
-//             .model('ScrapedReadsData')
-//             .findByIdAndUpdate.mockRejectedValue(
-//                 new Error('Error updating data'),
-//             )
-
-//         const result = await scrapedReadsData.updateData(id, newData)
-
-//         expect(result).toBeNull()
-//     })
+    //     // Verifica se o retorno é null (erro durante a exclusão)
+    //     expect(deletedData).toBeNull()
+    // })
+})
 
 //     it('should delete data successfully', async () => {
 //         const id = '12345'

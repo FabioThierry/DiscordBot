@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import consola from 'consola'
 
 export const ScrapedDataSchema = new mongoose.Schema({
     url: { type: String, required: true },
@@ -26,9 +27,9 @@ export class ScrapedReadsData {
             return newData
         } catch (error) {
             if (error.name === 'ValidationError') {
-                console.error('Validation error:', error.message)
+                consola.error('Validation error:', error.message)
             } else {
-                console.error('Error creating data:', error)
+                consola.error('Error creating data:', error)
             }
             return null
         }
@@ -39,7 +40,7 @@ export class ScrapedReadsData {
             const data = await ScrapedData.findOne({ title })
             return data
         } catch (error) {
-            console.error('Error fetching data by title:', error)
+            consola.error('Error fetching data by title:', error)
             return null
         }
     }
@@ -51,9 +52,13 @@ export class ScrapedReadsData {
                 newData,
                 { new: true },
             )
+            if (!updatedData) {
+                consola.error('Data not found for update')
+                return null
+            }
             return updatedData
         } catch (error) {
-            console.error('Error updating data:', error)
+            consola.error('Error updating data:', error)
             return null
         }
     }
@@ -61,10 +66,9 @@ export class ScrapedReadsData {
     async deleteData(id) {
         try {
             const deletedData = await ScrapedData.findByIdAndDelete(id)
-            console.log('Data deleted successfully')
             return deletedData
         } catch (error) {
-            console.error('Error deleting data:', error)
+            consola.error('Error deleting data:', error)
         }
     }
 
@@ -73,7 +77,7 @@ export class ScrapedReadsData {
             const data = await ScrapedData.findById(id)
             return data
         } catch (error) {
-            console.error('Error getting data by ID:', error)
+            consola.error('Error getting data by ID:', error)
             return null
         }
     }
@@ -83,7 +87,7 @@ export class ScrapedReadsData {
             const allData = await ScrapedData.find()
             return allData
         } catch (error) {
-            console.error('Error getting all data:', error)
+            consola.error('Error getting all data:', error)
             return []
         }
     }
@@ -92,7 +96,7 @@ export class ScrapedReadsData {
             const allData = await ScrapedData.find(filter)
             return allData
         } catch (error) {
-            console.error('Error getting all data:', error)
+            consola.error('Error getting all data:', error)
             return []
         }
     }
@@ -102,7 +106,7 @@ export class ScrapedReadsData {
 
             return allData
         } catch (error) {
-            console.error('Error getting all data:', error)
+            consola.error('Error getting all data:', error)
             return []
         }
     }

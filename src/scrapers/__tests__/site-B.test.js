@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import SiteBScraper from '../Site-B.scraper.js'
+import SiteBScraper from '../site-B.scraper.js'
 import axios from 'axios'
 import fs from 'fs'
 import path from 'path'

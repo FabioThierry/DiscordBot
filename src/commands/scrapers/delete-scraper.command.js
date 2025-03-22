@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
-import { ScrapedReadsData } from '../../models/Scraped-reads-data.model.js'
+import { ScrapedReadsData } from '../../models/scraped-reads-data.model.js'
 
 const scrapedReadsDataInstance = new ScrapedReadsData()
 

@@ -12,8 +12,6 @@
 
 ### [x] adicionar um novo comando para adicionar novos sites
 
-### [x] adicionar listagem de sites
-
 ### [x] adicionar forma de atualizar os sites!
 
 ### [x] adicionar forma de remover sites
@@ -21,3 +19,11 @@
 ### [x] foçar uma atualização
 
 ### [x] mensagem de erro de verificação
+
+### [] adicionar listagem de sites
+
+### [] criar testes
+
+### [] atualizar os templates
+
+### [] adicionar novo tipo de site
