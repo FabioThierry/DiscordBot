@@ -1,9 +1,11 @@
 import { ScrapedReadsData } from '../models/scraped-reads-data.model.js'
 import SiteAScraper from '../scrapers/site-A.scraper.js'
 import SiteBScraper from '../scrapers/site-B.scraper.js'
+import SiteCScraper from '../scrapers/site-C.scraper.js'
 
 const siteA = ['harimanga.com', 'harimanga.me']
 const siteB = ['bato.to', 'mangatoto.com', 'mto.to', 'batotoo.com']
+const siteC = ['rainofsnow.com']
 
 // Instancia srapedData localmente
 const srapedData = new ScrapedReadsData()
@@ -12,6 +14,7 @@ const srapedData = new ScrapedReadsData()
 const scraperMap = {
     siteA: { domains: siteA, Scraper: SiteAScraper },
     siteB: { domains: siteB, Scraper: SiteBScraper },
+    siteC: { domains: siteC, Scraper: SiteCScraper },
 }
 
 // Função para selecionar o scraper

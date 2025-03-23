@@ -51,6 +51,19 @@ class HtmlParser {
         const image = $(selector).attr('src')
         return image
     }
+
+    static extractImageDataSrc(html, selector) {
+        const $ = cheerio.load(html)
+        const image = $(selector).attr('data-src')
+        return image
+    }
+
+    static extractImageAnchor(html, selector) {
+        const $ = cheerio.load(html)
+        const image = $(selector).attr('href')
+        return image
+    }
+
     /**
      * Extrai o número mais próximo de um elemento usando um seletor CSS e uma palavra-chave.
      * @param {string} html - O conteúdo HTML da página.
