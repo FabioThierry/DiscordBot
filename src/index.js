@@ -9,7 +9,7 @@ import AntiCrash from './utils/anti-crash.util.js'
 import { TOKEN } from './config.js'
 import db from './db.js'
 
-// import keep_alive from './keep_alive.js'
+import keep_alive from './keep_alive.js'
 
 // Database connection
 db.connect()
